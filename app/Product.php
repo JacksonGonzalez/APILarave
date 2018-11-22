@@ -12,4 +12,9 @@ class Product extends Model
     protected $fillable = [
         'name', 'description', 'quantity', 'status', 'image', 'seller_id'
     ];
+
+
+    public function estaDisponible(){
+        return $this->status == Product::PRODUCTO_DISPONIBLE;
+    }
 }
