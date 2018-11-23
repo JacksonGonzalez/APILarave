@@ -31,14 +31,15 @@ class DatabaseSeeder extends Seeder
 
         factory(User::class, $cantidadUsuarios)->create();
         factory(Category::class, $cantidadCategorias)->create();
-        factory(Product::class, $cantidadTransacciones)->create()->each(
-            function ($producto){
-                $categorias = Category::all()->random(mt_rand(1, 5))->pluck('id');
 
-                $producto = categories()->attach($categorias);
-            }
-        );
-        factory(Transaction::class, $cantidadTransacciones)->create();
+        // factory(Product::class, $cantidadTransacciones)->create()->each(
+		// 	function ($producto) {
+		// 		// $categorias = Category::all()->random(mt_rand(1, 5))->pluck('id');
+		// 		// $producto->categories()->attach($categorias);
+		// 	}
+		// );  
+
+        // factory(Transaction::class, $cantidadTransacciones)->create();
         
     }
 }
