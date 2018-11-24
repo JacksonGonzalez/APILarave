@@ -7,8 +7,8 @@ use App\User;
 
 $factory->define(Transaction::class, function (Faker $faker) {
 
-    $vendedor = Seller::has('products')->get()->random(23);
-    $comprador = User::all()->except($vendedor->id)->random();
+    $vendedor = Seller::has('products')->get()->random();
+	$comprador = User::all()->except($vendedor->id)->random();
     
     return [
         'quantity' => $faker->numberBetween(1, 5),

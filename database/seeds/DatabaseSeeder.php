@@ -38,8 +38,8 @@ class DatabaseSeeder extends Seeder
 		// 		// $producto->categories()->attach($categorias);
 		// 	}
 		// );  
-
-        // factory(Transaction::class, $cantidadTransacciones)->create();
+        factory(Product::class, $cantidadProductos)->create();
+        factory(Transaction::class, $cantidadTransacciones)->create();
         
     }
 }
