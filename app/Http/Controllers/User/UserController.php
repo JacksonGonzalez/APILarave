@@ -5,8 +5,9 @@ namespace App\Http\Controllers\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Http\Controllers\ApiController;
 
-class UserController extends Controller
+class UserController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +18,7 @@ class UserController extends Controller
     {
         $usuarios = User::all();
 
-        return response()->json(['data' => $usuarios], 200);
+        return $this->showAll($usuarios);
         // return $usuarios;
     }
 
@@ -45,7 +46,7 @@ class UserController extends Controller
 
         $usuario = User::create($campos);
 
-        return response()->json(['data' => $usuario], 201);
+        return $this->showOne($usuario, 201);
     }
 
     /**
@@ -58,7 +59,7 @@ class UserController extends Controller
     {
         $usuario = User::findOrFail($id);
 
-        return response()->json(['data' => $usuario], 200);
+        return $this->showOne($usuario);
     }
 
 
@@ -97,7 +98,7 @@ class UserController extends Controller
 
         if($request->has('admin')){
             if(!$user->esVerificado()){
-                return response()->json(['error' => 'Solo usuarios verificados pueden ser administradores', 'code' => 409], 409);
+                return $this->errorResponse('Solo usuarios verificados pueden ser administradores', 409);
             }
 
             $user->admin = $request->admin;
@@ -105,12 +106,12 @@ class UserController extends Controller
 
         // isDirty es para verificar si algo cambio 
         if(!$user->isDirty()){
-            return response()->json(['error' => 'Se debe tener al menos un valor diferente para actualizar', 'code' => 422], 422);
+            return $this->errorResponse('Se debe tener al menos un valor diferente para actualizar', 422);
         }
 
         $user->save();
 
-        return response()->json(['data' => $user], 200);
+        return $this->showOne($user);
         
     }
 
@@ -126,6 +127,6 @@ class UserController extends Controller
 
         $user->delete();
 
-        return response()->json(['data' => $user], 200);
+        return $this->showOne($user);
     }
 }
