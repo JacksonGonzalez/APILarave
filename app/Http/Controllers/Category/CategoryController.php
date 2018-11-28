@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ApiController;
+use App\Category;
 
 class CategoryController extends ApiController
 {
@@ -15,17 +16,9 @@ class CategoryController extends ApiController
      */
     public function index()
     {
-        //
-    }
+        $categories = Category::all();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return $this->showAll($categories);
     }
 
     /**
@@ -36,7 +29,16 @@ class CategoryController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'name' => 'required',
+            'description' => 'required'
+        ];
+
+        $this->validate($request, $rules);
+
+        $category = Category::create($request->all());
+
+        return $this->showOne($category, 201);
     }
 
     /**
@@ -47,18 +49,9 @@ class CategoryController extends ApiController
      */
     public function show($id)
     {
-        //
-    }
+        $categoria = Category::findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return $this->showOne($categoria);
     }
 
     /**
@@ -70,7 +63,23 @@ class CategoryController extends ApiController
      */
     public function update(Request $request, $id)
     {
-        //
+        $category = Category::findOrFail($id);
+
+        if($request->has('name')){
+            $category->name = $request->name;
+        }
+
+        if($request->has('description')){
+            $category->description = $request->description;
+        }
+
+        if($category->isClean()){
+            return $this->errorResponse('Debe especificar un valor diferente para actualizar', 422);
+        }
+
+        $category->save();
+
+        return $this->showOne($category);
     }
 
     /**
@@ -81,6 +90,10 @@ class CategoryController extends ApiController
      */
     public function destroy($id)
     {
-        //
+        $categoria = Category::findOrFail($id);
+
+        $categoria->delete();
+
+        return $this->showOne($categoria);
     }
 }
