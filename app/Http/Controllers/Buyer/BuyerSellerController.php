@@ -20,7 +20,7 @@ class BuyerSellerController extends ApiController
         // dd($sellers);
 
         // return $this->showAll($sellers);
-        return \json_decode($sellers);
+        return json_decode($sellers);
     }
 
 }
